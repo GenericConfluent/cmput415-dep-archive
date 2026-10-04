@@ -27,8 +27,8 @@ runs:
         echo "antlr-ins=$(realpath ./lib415/antlr4-install)" >> $GITHUB_OUTPUT
         echo "mlir-ins=$(realpath ./lib415/llvm-install)" >> $GITHUB_OUTPUT
     - name: Install Dragon Runner
-        shell: bash
-        run: | 
-          git clone https://github.com/cmput415/Dragon-Runner.git
-          cd Dragon-Runner
-          pip install .
+      shell: bash
+      run: | 
+        git clone https://github.com/cmput415/Dragon-Runner.git
+        cd Dragon-Runner
+        pip install .
