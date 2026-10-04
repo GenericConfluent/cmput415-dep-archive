@@ -1,0 +1,34 @@
+name: "Install CMPUT415 Libraries"
+description: "Will install MLIR 23.1.1 and ANTLR4 C++ libs and headers."
+author: "GenericConfluent"
+
+outputs:
+  antlr-ins:
+    description: "Absolute path to ANTLR install"
+    value: ${{ steps.lib415-extract.outputs.antlr-ins }}
+  mlir-ins:
+    description: "Absolute path to MLIR install"
+    value: ${{ steps.lib415-extract.outputs.mlir-ins }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Fetch Tarball
+      shell: bash
+      run: |
+        cd /home/runner/work
+        gh release download v0.1.0 --repo GenericConfluent/cmput415-dep-archive --pattern 'lib415.tar.gz'
+    - name: Extract Libraries
+      id: lib415-extract
+      shell: bash
+      run: |
+        cd /home/runner/work
+        tar -xf lib415.tar.gz
+        echo "antlr-ins=$(realpath ./lib415/antlr4-install)" >> $GITHUB_OUTPUT
+        echo "mlir-ins=$(realpath ./lib415/llvm-install)" >> $GITHUB_OUTPUT
+    - name: Install Dragon Runner
+        shell: bash
+        run: | 
+          git clone https://github.com/cmput415/Dragon-Runner.git
+          cd Dragon-Runner
+          pip install .

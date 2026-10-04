@@ -1,19 +1,15 @@
 #!/usr/bin/env bash
 
-export UNCOMPRESSED="c415darch"
+UNCOMPRESSED="${TARGEN_DIR:-lib415}"
 
-# Clean old if it exists
-rm -r "${UNCOMPRESSED}"
+# Clean old contents if they exist (the dir itself may be a mount point)
 mkdir -p "${UNCOMPRESSED}"
+find "${UNCOMPRESSED}" -mindepth 1 -delete
 
 # Fetch the relevant directories we need
 cp -r "${ANTLR_INS}" "${UNCOMPRESSED}/antlr4-install"
 
-# FIXME: We may need more than just lib and include.
-export LLVM_TARGET="${UNCOMPRESSED}/llvm-build"
-mkdir "${LLVM_TARGET}"
-cp -r "${MLIR_INS}/lib" "${LLVM_TARGET}"
-cp -r "${MLIR_INS}/include" "${LLVM_TARGET}"
+export LLVM_TARGET="${UNCOMPRESSED}/llvm-install"
 
-tar -czvf c415arch.tar.gz "${UNCOMPRESSED}"
+cp -r "${MLIR_INS}" "${LLVM_TARGET}"
 
