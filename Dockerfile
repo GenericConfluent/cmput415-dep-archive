@@ -54,12 +54,7 @@ RUN cd llvm-project/build && \
     rm -r "${WORK_DIR}/llvm-project"
 
 # Remove Bloat to Shrink Image Size
-RUN rm -r "${MLIR_INS}/examples" && \
-    cd "${MLIR_INS}/bin" && \
-    find . ! -name 'llc' \
-        ! -name 'lli' \
-        ! -name 'clang' \
-        -type f -exec rm -f {} +
+RUN rm -r "${MLIR_INS}/examples"
 
 # Install Dragon Runner
 RUN git clone https://github.com/cmput415/Dragon-Runner.git && \
