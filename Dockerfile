@@ -40,21 +40,23 @@ RUN git clone https://github.com/llvm/llvm-project.git && \
     cd llvm-project && \
     git checkout llvmorg-23.1.1 && \
     cmake -G Ninja llvm \
-        -DLLVM_ENABLE_PROJECTS=mlir \
-        -DLLVM_BUILD_EXAMPLES=ON \
+        -DLLVM_ENABLE_PROJECTS="mlir;clang" \
+        -DLLVM_BUILD_EXAMPLES=OFF \
+        -DLLVM_INCLUDE_EXAMPLES=OFF \
+        -DLLVM_INCLUDE_TESTS=OFF \
+        -DLLVM_INCLUDE_BENCHMARKS=OFF \
+        -DMLIR_INCLUDE_TESTS=OFF \
         -DLLVM_TARGETS_TO_BUILD="Native" \
         -DCMAKE_BUILD_TYPE=Release \
         -DLLVM_ENABLE_ASSERTIONS=ON \
+        -DLLVM_DISTRIBUTION_COMPONENTS="llvm-headers;llvm-libraries;cmake-exports;llvm-config;llvm-tblgen;mlir-headers;mlir-libraries;mlir-cmake-exports;mlir-tblgen;llc;lli;opt;clang;clang-resource-headers" \
         -DCMAKE_INSTALL_PREFIX="${MLIR_INS}" \
         -B build/
 
 # Perform the Build
 RUN cd llvm-project/build && \
-    ninja install -j$(nproc) && \
+    ninja install-distribution -j$(nproc) && \
     rm -r "${WORK_DIR}/llvm-project"
-
-# Remove Bloat to Shrink Image Size
-RUN rm -r "${MLIR_INS}/examples"
 
 # Install Dragon Runner
 RUN git clone https://github.com/cmput415/Dragon-Runner.git && \
