@@ -9,6 +9,9 @@ outputs:
   mlir-ins:
     description: "Absolute path to MLIR install"
     value: ${{ steps.lib415-extract.outputs.mlir-ins }}
+  env-file:
+    description: "Absolute path to a sourceable script exporting ANTLR_INS, MLIR_INS, ANTLR_JAR, MLIR_DIR, PATH and CLASSPATH"
+    value: ${{ steps.lib415-extract.outputs.env-file }}
 
 runs:
   using: "composite"
@@ -26,6 +29,7 @@ runs:
         tar -xf lib415.tar.gz
         echo "antlr-ins=$(realpath ./lib415/antlr4-install)" >> $GITHUB_OUTPUT
         echo "mlir-ins=$(realpath ./lib415/llvm-install)" >> $GITHUB_OUTPUT
+        echo "env-file=$(realpath ./lib415/env.sh)" >> $GITHUB_OUTPUT
     - name: Install Dragon Runner
       shell: bash
       run: | 
